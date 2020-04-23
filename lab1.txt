@@ -12,3 +12,12 @@ NOT NULL
 3.What does the function save() return
 
 Function save() returns the values that have been inserted into the DB
+
+4.What is happening from line 18-21
+
+This if statement checks whether the query runs successfully and returns a success or error message
+
+5. Where should closeDatabase function be?
+
+It should be in the if statement after the success message has been echoed, close the db connection.
+
