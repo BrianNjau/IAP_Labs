@@ -33,7 +33,8 @@ class User implements Crud{
         return $res;
     }
     public function readAll(){
-        return null;
+        echo $this->$allData = $fn, $ln, $city;
+        return $allData;
     }
 
     public function readUnique(){
