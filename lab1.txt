@@ -1,0 +1,14 @@
+1.In the query above, what is the meaning of AUTO_INCREMENT and NOT NULL?
+
+AUTO_INCREMENT is an attribute used to generate a unique identity for new rows.
+
+NOT NULL is a constraint that enforces a column not to accept NULL values.
+
+
+2.Identify any SQL constraints in the query you just executed.
+
+NOT NULL
+
+3.What does the function save() return
+
+Function save() returns the values that have been inserted into the DB
