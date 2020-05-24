@@ -2,13 +2,12 @@
 
 include "Crud.php";
 
-
 class User implements Crud{
     private $user_id;
     private $first_name;
     private $last_name;
     private $city_name;
-
+    
 
     function __construct($first_name,$last_name,$city_name){
         $this->first_name = $first_name;
@@ -27,14 +26,32 @@ class User implements Crud{
     public function save(){
         $fn = $this->first_name;
         $ln = $this->last_name;
-        $city = $this->city_name;    
-        $res = mysql_query("INSERT INTO user(first_name,last_name,user_city) VALUES('$fn','$ln','$city')") or die("Error " . mysqli_error());
-   
+        $city = $this->city_name;  
+        // initialize PDO  
+        $pdo = new PDO('mysql:host=localhost;dbname=btc3205', 'root', '');
+        $res = $pdo ->prepare("INSERT INTO user(first_name,last_name,user_city) VALUES(?,?,?)");
+        $res->execute([$fn,$ln,$city]);
+          //check for success
+          if($res){
+            echo "Save operation was successful:\n" ;
+            
+        }else{
+            echo "Error occured !";
+        }
+
         return $res;
     }
     public function readAll(){
-        echo $this->$allData = $fn, $ln, $city;
-        return $allData;
+          // initialize PDO  
+          $pdo = new PDO('mysql:host=localhost;dbname=btc3205', 'root', '');
+        $stmt = $pdo->prepare("SELECT * FROM user WHERE id > ?");
+        $stmt->execute([0]);
+
+/* Fetch all of the remaining rows in the result set */
+        print("Fetch all of the values in DB:\n");
+        $result = $stmt->fetchAll();
+        print_r($result);   
+
     }
 
     public function readUnique(){
@@ -47,6 +64,19 @@ class User implements Crud{
         return null;
     }public function removeAll(){
         return null;
+    }
+    public function validateForm(){
+        $fn = $this ->first_name;
+        $ln = $this->last_name;
+        $city= $this->city_name;
+        if($fn=="" || $ln=="" || $city==""){
+            return false;
+        }
+        return true;
+    }
+    public function createFormErrorSessions(){
+        session_start();
+        $_SESSION['form_errors'] = "All fields are required";
     }
 }
 ?>

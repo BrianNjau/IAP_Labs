@@ -1,7 +1,8 @@
 <?php
     include_once 'DBConnector.php';
     include_once 'user.php';
-    $con = new DBConnector; // make db connection
+   
+     $con = new DBConnector; // make db connection
     //data insert code
     if(isset($_POST['btn_save'])){
         $first_name = $_POST['first_name'];
@@ -10,33 +11,49 @@
 
         //create user object
         $user = new User ($first_name,$last_name,$city);
+        if(!$user->validateForm()){
+            $user->createFormErrorSessions();
+            header("Refresh:0");
+            die();
+        }
         $res = $user->save();
 
-        //check for success
-        if($res){
-            echo "Save operation was successful";
-            
-        }else{
-            echo "Error occured !";
-        }
+        $read = $user->readAll();
 
+       
+        //Success checking code in user.php
     }
+    //read all objects in db
+    
 ?>
 <html>
 <head>
 <title>Lab 1</title>
+<script src="validate.js"></script>
+<link rel="stylesheet" href="validate.css">
 </head>
 <body>
-    <form method="post" action = "<?=$_SERVER['PHP_SELF']?>">
+    <form method="POST" name="user_details" id="user_details" onsubmit="return validateForm()" action = "<?=$_SERVER['PHP_SELF']?>">
     <table align="center">
     <tr>
-    <td><input type="text" name="first_name" placeholder="First Name" required></td>
+    <div id="form-errors">
+    <?php
+    session_start();
+    if(!empty($_SESSION['form_errors'])){
+        echo " ". $_SESSION['form_errors'];
+        unset($_SESSION['form_errors']);
+    }
+
+    ?>
+    
+    </div>
+    <td><input type="text" name="first_name" placeholder="First Name" ></td>
     </tr>
     <tr>
-    <td><input type="text" name="last_name" placeholder="Last Name" required></td>
+    <td><input type="text" name="last_name" placeholder="Last Name"></td>
     </tr>
     <tr>
-    <td><input type="text" name="city_name" placeholder="City" required></td>
+    <td><input type="text" name="city_name" placeholder="City" ></td>
     </tr> <tr>
     <td><button type="submit" name="btn_save"><strong>SAVE</strong></button></td>
     </tr>
