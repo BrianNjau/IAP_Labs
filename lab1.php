@@ -2,6 +2,7 @@
     session_start();
     include_once 'DBConnector.php';
     include_once 'user.php';   
+     include_once 'fileUploader.php'; 
      $con = new DBConnector; // make db connection
     //data insert code
     if(isset($_POST['btn_save'])){
@@ -13,6 +14,7 @@
 
         //create user object
         $user = new User ($first_name,$last_name,$city,$username,$password);
+        $uploader = new FileUploader;
         if(!$user->validateForm()){
             $user->createFormErrorSessions();
             header("Refresh:0");
@@ -20,6 +22,10 @@
         }
        // $check = $user->isUserExist();        
        
+       $file_upload_response = $uploader->uploadFile();
+        if($file_upload_response){
+            echo "File Saved!!";
+        }
         
         $connect = new PDO('mysql:host=localhost;dbname=btc3205', 'root', '');  
         $query = "SELECT * FROM user WHERE username = :username";  
@@ -88,6 +94,8 @@
     <td><input type="text" name="username" placeholder="Username" ></td>
     </tr> <tr>
     <td><input type="password" name="password" placeholder="Password"></td>
+    </tr> <tr>
+    <td>Profile Image:<input type="file" name="fileToUpload" id="fileToUpload"></td>
     </tr> <tr>
     <td><button type="submit" name="btn_save"><strong>SAVE</strong></button></td>
 
